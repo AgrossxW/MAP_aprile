@@ -6,7 +6,7 @@
 
 1. [Introduzione](#1-introduzione)  
 2. [Requisiti di Sistema](#2-requisiti-di-sistema)  
-3. [Struttura del Progetto](#3-struttura-del-progetto)  
+3. [Struttura del Sistema](#3-struttura-del-sistema)  
 4. [Modalità di Avvio](#4-modalità-di-avvio)  
    - [4.1 Avvio su Windows](#41-avvio-su-windows)  
    - [4.2 Avvio su macOS / Linux](#42-avvio-su-macos--linux)  
@@ -55,9 +55,9 @@ Sistemi operativi supportati:
 
 ------------------------------------------------------------------------
 
-# 3. Struttura del Progetto
+# 3. Struttura del Sistema
 
-Il progetto è organizzato nei seguenti package:
+Il sistema è organizzato nei seguenti package:
 
 -   `server` → Gestione connessioni client
 -   `mining` → Algoritmo di clustering
