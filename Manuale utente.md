@@ -1,7 +1,5 @@
 # Manuale Utente
-
-## Sistema di Clustering QT (Architettura Client/Server)
-
+## Sistema di Clustering QT su Database MySQL (Architettura Client–Server)
 ------------------------------------------------------------------------
 
 # Indice
@@ -13,29 +11,31 @@
    - [4.1 Avvio su Windows](#41-avvio-su-windows)  
    - [4.2 Avvio su macOS / Linux](#42-avvio-su-macos--linux)  
 5. [Utilizzo del Client](#5-utilizzo-del-client)  
-6. [Modalità di Apprendimento](#6-modalità-di-apprendimento)  
-   - [6.1 Apprendimento da Database](#61-apprendimento-da-database)  
-   - [6.2 Apprendimento da File](#62-apprendimento-da-file)  
-7. [Salvataggio dei Risultati](#7-salvataggio-dei-risultati)  
-8. [Arresto del Server](#8-arresto-del-server)  
-9. [Risoluzione dei Problemi](#9-risoluzione-dei-problemi)  
-10. [Architettura del Sistema](#10-architettura-del-sistema)
+   - [5.1 Apprendimento da Database](#61-apprendimento-da-database)  
+   - [5.2 Apprendimento da File](#62-apprendimento-da-file)  
+6. [Salvataggio dei Risultati](#7-salvataggio-dei-risultati)  
+7. [Arresto del Server](#8-arresto-del-server)  
+8. [Risoluzione dei Problemi](#9-risoluzione-dei-problemi)  
+9. [Architettura del Sistema](#10-architettura-del-sistema)
 
 ------------------------------------------------------------------------
 
-# 1 Introduzione
+# 1. Introduzione
 
 Il sistema implementa un sistema **Client–Server** per l’esecuzione dell’algoritmo di clustering QT (Quality Threshold).
 
 Il **Server**: 
-- Gestisce le connessioni dei client
-- Esegue l'algoritmo di clustering
-- Interagisce con il database o con file locali
+- Gestisce le connessioni multiple dei client tramite multithreading
+- Si connette a un database MySQL
+- Esegue il clustering
+- Salva e carica cluster da file
 
 Il **Client**: 
-- Permette all'utente di selezionare la modalità di apprendimento
-- Consente l'inserimento del raggio (radius)
-- Visualizza i risultati del clustering
+  - Permette all’utente di:
+    - Caricare dati dal database
+    - Eseguire clustering con raggio variabile
+    - Salvare cluster
+    - Ricaricare cluster da file
 
 ------------------------------------------------------------------------
 
@@ -43,9 +43,9 @@ Il **Client**:
 
 Per eseguire il sistema è necessario:
 
--   Java JDK (versione compatibile con il progetto)
+-   Java JDK 17 o superiore
 -   MySQL Server installato e attivo (per modalità database)
--   Driver MySQL Connector presente nella cartella `libs`
+-   Driver MySQL Connector presente nella cartella `Server / libs /`
 
 Sistemi operativi supportati:
 
@@ -64,13 +64,6 @@ Il progetto è organizzato nei seguenti package:
 -   `data` → Rappresentazione del dataset
 -   `database` → Accesso al database
 
-Cartelle principali:
-
--   `Server/`
--   `Client/`
--   `libs/`
--   `start/`
-
 ------------------------------------------------------------------------
 
 # 4. Modalità di Avvio
@@ -81,18 +74,14 @@ Cartelle principali:
 
 ## 4.1 Avvio su Windows
 
-1.  Aprire la cartella `start`
-
+1.  Aprire la cartella `start` da interfaccia
 2.  Eseguire:
-
     start-server.bat
 
 3.  Successivamente eseguire:
-
     start-client.bat
 
 In alternativa da Prompt dei comandi:
-
     start-server.bat
     start-client.bat
 
@@ -101,68 +90,56 @@ In alternativa da Prompt dei comandi:
 ## 4.2 Avvio su macOS / Linux
 
 Aprire il terminale nella cartella `start` ed eseguire:
-
     chmod +x start-server.sh
     chmod +x start-client.sh
 
 Avvio server:
-
     ./start-server.sh
 
 Avvio client:
-
     ./start-client.sh
+
+![Esecuzione Server](../img/server.png)
 
 ------------------------------------------------------------------------
 
 # 5. Utilizzo del Client
 
-Una volta avviato il client, l'utente può:
+Una volta avviato il client, l'utente può selezionare tra 2 opzioni :
+![Selezione Client](../img/client1.png)
 
-1.  Selezionare la modalità di apprendimento
-2.  Inserire il valore del raggio (radius)
-3.  Visualizzare il numero di cluster generati
-4.  Salvare il risultato su file
+## 5.1 Caricamento da File (Load to File)
 
-Il raggio determina la dimensione massima dei cluster.
+Consente di caricare cluster già generati e salvati precedentemente.  
+Procedura:
 
-------------------------------------------------------------------------
+1. Selezionare l'opzione `1` (Load to File).  
+2. Inserire:
+   - Nome della tabella  
+   - Raggio usato durante la generazione del cluster  
 
-# 6. Modalità di Apprendimento
+![Load to File](img/file.png)
 
-## 6.1 Apprendimento da Database
+Il caricamento da file funziona solo se esiste già un clustering salvato con quel raggio per la tabella indicata.
 
-L'utente inserisce:
+## 5.2 Caricamento da Database (Load to DB)
 
--   Nome della tabella
--   Valore del raggio
+Consente di ottenere i dati direttamente da una tabella MySQL.  
+Procedura:
 
-Il sistema: - Legge i dati dal database - Costruisce il dataset - Esegue
-il clustering
+1. Selezionare l'opzione `2` (Load to DB).  
+2. Inserire:
+   - Nome della tabella  
+   - Raggio da utilizzare
+  
+![Load to DB](img/db1.png)
 
-------------------------------------------------------------------------
+I cluster vengono calcolati e mostrati a video:
 
-## 6.2 Apprendimento da File
+![cluster Load to DB](img/db2.png)
 
-Permette di caricare un clustering precedentemente salvato.
 
-Il sistema: - Deserializza il file - Ripristina il ClusterSet
-
-------------------------------------------------------------------------
-
-# 7. Salvataggio dei Risultati
-
-Il sistema consente di salvare:
-
--   Numero di cluster
--   Contenuto dei cluster
--   Raggio utilizzato
-
-I file vengono salvati in formato serializzato.
-
-------------------------------------------------------------------------
-
-# 8. Arresto del Server
+# 7. Arresto del Server
 
 Per chiudere correttamente il server:
 
@@ -173,24 +150,25 @@ Si consiglia di evitare la chiusura forzata della finestra.
 
 ------------------------------------------------------------------------
 
-# 9. Risoluzione dei Problemi
+# 8. Risoluzione dei Problemi
 
 ## Errore: DatabaseConnectionException
 
-Verificare: - Che MySQL sia attivo - Che le credenziali siano corrette -
-Che il driver MySQL sia presente in `libs/`
+Verificare: 
+- Che MySQL sia attivo
+- Che le credenziali siano corrette
+- Che il driver MySQL sia presente in `Server / libs/`
 
 ## Errore: ClusteringRadiusException
 
-Il raggio inserito è troppo piccolo.
+Segnala la generazione di un solo cluster da parte dell’algoritmo QT-Clustering !
 
 ------------------------------------------------------------------------
 
-# 10. Architettura del Sistema
+# 9. Architettura del Sistema
 
 Il sistema segue un'architettura a livelli:
 
 Server → Mining → Data → Database
 
-Le dipendenze sono unidirezionali per garantire separazione delle
-responsabilità.
+Le dipendenze sono unidirezionali per garantire separazione delle responsabilità.
