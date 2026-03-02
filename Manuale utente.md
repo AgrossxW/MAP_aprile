@@ -12,9 +12,9 @@
    - [4.2 Avvio su macOS / Linux](#42-avvio-su-macos--linux)  
 5. [Utilizzo del Client](#5-utilizzo-del-client)  
    - [5.1 Caricamento da File](#51-Caricamento-da-File-load-to-file)  
-   - [5.2 Apprendimento da Database](#52-Caricamento-da-Database-Load-to-DB)
-6. [Salvataggio dei Risultati](#7-salvataggio-dei-risultati)  
-7. [Arresto del Server](#8-arresto-del-server)  
+   - [5.2 Caricamento da Database](#52-Caricamento-da-Database-Load-to-DB) 
+6. [Arresto del Server](#6-arresto-del-server)
+7. [Interpretazione dei Risultati](#7-interpretazione-dei-risultati) 
 8. [Risoluzione dei Problemi](#9-risoluzione-dei-problemi)  
 9. [Architettura del Sistema](#10-architettura-del-sistema)
 
@@ -138,8 +138,9 @@ I cluster vengono calcolati e mostrati a video, ad esempio:
 
 ![cluster Load to DB](img/db2.png)
 
+------------------------------------------------------------------------
 
-# 7. Arresto del Server
+# 6. Arresto del Server
 
 Per chiudere correttamente il server:
 
@@ -147,6 +148,15 @@ Per chiudere correttamente il server:
 -   macOS/Linux: premere CTRL + C
 
 Si consiglia di evitare la chiusura forzata della finestra.
+
+------------------------------------------------------------------------
+
+# 7. Interpretazione dei Risultati
+
+- **Centroid=(...)** indica il punto centrale del cluster, un esempio reale del dataset che rappresenta il cluster.  
+- **Examples** elenca tutti gli elementi appartenenti al cluster.  
+- **dist=...** indica la distanza di ciascun elemento dal centroid; più è bassa, più l’elemento è simile al centro del cluster.  
+- **AvgDistance** è la distanza media tra tutti gli elementi del cluster e il centroid
 
 ------------------------------------------------------------------------
 
