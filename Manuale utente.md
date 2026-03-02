@@ -11,8 +11,8 @@
    - [4.1 Avvio su Windows](#41-avvio-su-windows)  
    - [4.2 Avvio su macOS / Linux](#42-avvio-su-macos--linux)  
 5. [Utilizzo del Client](#5-utilizzo-del-client)  
-   - [5.1 Apprendimento da Database](#61-apprendimento-da-database)  
-   - [5.2 Apprendimento da File](#62-apprendimento-da-file)  
+   - [5.1 Caricamento da File](#51-Caricamento-da-File(Load-to-File))  
+   - [5.2 Apprendimento da Database](#52-Caricamento-da-Database-(Load-to-DB))
 6. [Salvataggio dei Risultati](#7-salvataggio-dei-risultati)  
 7. [Arresto del Server](#8-arresto-del-server)  
 8. [Risoluzione dei Problemi](#9-risoluzione-dei-problemi)  
@@ -134,7 +134,7 @@ Procedura:
   
 ![Load to DB](img/db1.png)
 
-I cluster vengono calcolati e mostrati a video:
+I cluster vengono calcolati e mostrati a video, ad esempio:
 
 ![cluster Load to DB](img/db2.png)
 
