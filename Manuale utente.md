@@ -144,8 +144,8 @@ I cluster vengono calcolati e mostrati a video, ad esempio:
 
 Per chiudere correttamente il server:
 
--   Windows: premere CTRL + C
--   macOS/Linux: premere CTRL + C
+-   Windows: premere `CTRL + C`
+-   macOS/Linux: premere `CTRL + C`
 
 Si consiglia di evitare la chiusura forzata della finestra.
 
@@ -153,10 +153,26 @@ Si consiglia di evitare la chiusura forzata della finestra.
 
 # 7. Interpretazione dei Risultati
 
-- **Centroid=(...)** indica il punto centrale del cluster, un esempio reale del dataset che rappresenta il cluster.  
-- **Examples** elenca tutti gli elementi appartenenti al cluster.  
-- **dist=...** indica la distanza di ciascun elemento dal centroid; più è bassa, più l’elemento è simile al centro del cluster.  
-- **AvgDistance** è la distanza media tra tutti gli elementi del cluster e il centroid
+Al termine dell’esecuzione del clustering, il sistema mostra le informazioni relative ai cluster generati.  
+Ogni cluster è descritto attraverso i seguenti elementi:
+
+- **Centroid = (...)**  
+  Rappresenta il centro del cluster.  
+  Nel sistema QT il centroide coincide con una **tupla reale del dataset**, scelta come punto di riferimento del cluster.
+
+- **Examples**  
+  Elenca tutti gli elementi (tuple) appartenenti al cluster.  
+  Un elemento viene assegnato al cluster se la sua distanza dal centroide è minore o uguale al raggio specificato.
+
+- **dist = ...**  
+  Indica la distanza tra un elemento del cluster e il suo centroide.  
+  Valori più bassi indicano una maggiore somiglianza rispetto al centro del cluster.
+
+- **AvgDistance**  
+  Rappresenta la distanza media tra tutti gli elementi del cluster e il centroide.  
+  Fornisce una misura della compattezza del cluster:
+  - valori bassi → cluster più compatto
+  - valori più alti → cluster più disperso
 
 ------------------------------------------------------------------------
 
