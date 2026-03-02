@@ -6,34 +6,36 @@
 
 # Indice
 
-1.  Introduzione\
-2.  Requisiti di Sistema\
-3.  Struttura del Progetto\
-4.  Modalità di Avvio
-    -   4.1 Avvio su Windows\
-    -   4.2 Avvio su macOS / Linux\
-5.  Utilizzo del Client\
-6.  Modalità di Apprendimento
-    -   6.1 Apprendimento da Database\
-    -   6.2 Apprendimento da File\
-7.  Salvataggio dei Risultati\
-8.  Arresto del Server\
-9.  Risoluzione dei Problemi\
-10. Architettura del Sistema
+1. [Introduzione](#1-introduzione)  
+2. [Requisiti di Sistema](#2-requisiti-di-sistema)  
+3. [Struttura del Progetto](#3-struttura-del-progetto)  
+4. [Modalità di Avvio](#4-modalità-di-avvio)  
+   - [4.1 Avvio su Windows](#41-avvio-su-windows)  
+   - [4.2 Avvio su macOS / Linux](#42-avvio-su-macos--linux)  
+5. [Utilizzo del Client](#5-utilizzo-del-client)  
+6. [Modalità di Apprendimento](#6-modalità-di-apprendimento)  
+   - [6.1 Apprendimento da Database](#61-apprendimento-da-database)  
+   - [6.2 Apprendimento da File](#62-apprendimento-da-file)  
+7. [Salvataggio dei Risultati](#7-salvataggio-dei-risultati)  
+8. [Arresto del Server](#8-arresto-del-server)  
+9. [Risoluzione dei Problemi](#9-risoluzione-dei-problemi)  
+10. [Architettura del Sistema](#10-architettura-del-sistema)
 
 ------------------------------------------------------------------------
 
-# 1. Introduzione
+# 1 Introduzione
 
-Il sistema implementa un algoritmo di clustering QT secondo
-un'architettura client-server.
+Il sistema implementa un sistema **Client–Server** per l’esecuzione dell’algoritmo di clustering QT (Quality Threshold).
 
-Il **Server**: - Gestisce le connessioni dei client - Esegue l'algoritmo
-di clustering - Interagisce con il database o con file locali
+Il **Server**: 
+- Gestisce le connessioni dei client
+- Esegue l'algoritmo di clustering
+- Interagisce con il database o con file locali
 
-Il **Client**: - Permette all'utente di selezionare la modalità di
-apprendimento - Consente l'inserimento del raggio (radius) - Visualizza
-i risultati del clustering
+Il **Client**: 
+- Permette all'utente di selezionare la modalità di apprendimento
+- Consente l'inserimento del raggio (radius)
+- Visualizza i risultati del clustering
 
 ------------------------------------------------------------------------
 
