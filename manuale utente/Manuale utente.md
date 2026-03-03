@@ -7,17 +7,18 @@
 1. [Introduzione](#1-introduzione)  
 2. [Requisiti di Sistema](#2-requisiti-di-sistema)
    - [2.1 Configurazione del Database](#21-Configurazione-del-Database)
-4. [Struttura del Sistema](#3-struttura-del-sistema)  
-5. [Modalità di Avvio](#4-modalità-di-avvio)  
+3. [Struttura del Sistema](#3-struttura-del-sistema)  
+4. [Modalità di Avvio](#4-modalità-di-avvio)  
    - [4.1 Avvio su Windows](#41-avvio-su-windows)  
    - [4.2 Avvio su macOS / Linux](#42-avvio-su-macos--linux)  
-6. [Utilizzo del Client](#5-utilizzo-del-client)  
+5. [Utilizzo del Client](#5-utilizzo-del-client)  
    - [5.1 Caricamento da File](#51-Caricamento-da-File-load-to-file)  
-   - [5.2 Caricamento da Database](#52-Caricamento-da-Database-Load-to-DB) 
-7. [Interpretazione dei Risultati](#6-interpretazione-dei-risultati) 
-8. [Arresto del Server](#7-arresto-del-server)
-9. [Risoluzione dei Problemi](#8-risoluzione-dei-problemi)  
-10. [Architettura del Sistema](#9-architettura-del-sistema)
+   - [5.2 Caricamento da Database](#52-Caricamento-da-Database-Load-to-DB)
+   - [5.3  Ritorno al menu o uscita dal programma](#53-Ritorno-al-menu-o-uscita-dal-programma)
+6. [Interpretazione dei Risultati](#6-interpretazione-dei-risultati) 
+7. [Arresto del Server](#7-arresto-del-server)
+8. [Risoluzione dei Problemi](#8-risoluzione-dei-problemi)  
+9. [Architettura del Sistema](#9-architettura-del-sistema)
 
 ------------------------------------------------------------------------
 
@@ -134,38 +135,75 @@ Esempio avvio server :
 
 # 5. Utilizzo del Client
 
-Una volta avviato il client, l'utente può selezionare tra 2 opzioni :
+Una volta avviato il client, viene mostrato un menu con **2 opzioni**:
+
+- **(1) Load clusters from file**
+- **(2) Load data from db**
+
 ![Selezione Client](../img/client1.png)
 
-## 5.1 Caricamento da File (Load to File)
 
-Consente di caricare cluster già generati e salvati precedentemente.  
-Procedura:
+---
 
-1. Selezionare l'opzione `1` (Load to File).  
+## 5.1 Caricamento da File (Load clusters from file)
+
+Consente di caricare e visualizzare cluster **già salvati in precedenza**.
+
+**Procedura:**
+1. Selezionare l'opzione `1` (**Load clusters from file**).
 2. Inserire:
-   - Nome della tabella  
-   - Raggio usato durante la generazione del cluster  
+   - **Table Name** (nome della tabella)
+   - **Radius** (raggio usato quando i cluster sono stati salvati)
 
 ![Load to File](../img/file.png)
 
-Il caricamento da file funziona solo se esiste già un clustering salvato con quel raggio per la tabella indicata.
+Se non esiste un file di clustering corrispondente alla coppia **(tabella, raggio)**, il server restituisce un messaggio di errore e l’operazione non va a buon fine.
 
-## 5.2 Caricamento da Database (Load to DB)
+---
 
-Consente di ottenere i dati direttamente da una tabella MySQL.  
-Procedura:
+## 5.2 Caricamento da Database (Load data from db)
 
-1. Selezionare l'opzione `2` (Load to DB).  
+Consente di caricare i dati da una tabella MySQL ed eseguire il clustering QT.
+
+**Procedura:**
+1. Selezionare l'opzione `2` (**Load data from db**).
 2. Inserire:
-   - Nome della tabella  
-   - Raggio da utilizzare
-  
+   - **Table name** (nome della tabella)
+   - Inserire il **Radius** per eseguire il clustering.
+
 ![Load to DB](../img/db1.png)
 
-I cluster vengono calcolati e mostrati a video, ad esempio:
+Il sistema mostra:
+- il **numero di cluster** trovati (`Number of Clusters: ...`)
+- la **descrizione dei cluster** (centroid, esempi, distanze, AvgDistance)
+
+Esempio di output:
 
 ![cluster Load to DB](../img/db2.png)
+
+### Salvataggio automatico dei risultati
+Dopo ogni esecuzione del clustering in modalità database, il client richiede al server il salvataggio dei risultati in un file **`.dat`** (clustering serializzato).  
+Questo file potrà poi essere ricaricato tramite l’opzione **Load clusters from file**.
+
+### Ripetizione dell’esecuzione (solo modalità Database)
+Al termine di ogni esecuzione in modalità database, il client chiede:
+
+Would you repeat?(y/n)
+
+- Inserendo `y`, l’utente può rieseguire il clustering (ad esempio provando un raggio diverso).
+- Inserendo `n`, si conclude la modalità database.
+
+---
+
+## 5.3 Ritorno al menu o uscita dal programma
+
+Dopo ogni operazione (sia File che Database) il client chiede:
+would you choose a new operation from menu?(y/n)
+
+
+- Inserendo `y`, viene mostrato nuovamente il menu principale.
+- Inserendo `n`, il client termina l’esecuzione e chiude la connessione con il server.
+
 
 ------------------------------------------------------------------------
 
