@@ -34,7 +34,7 @@ Il **Client**:
   - Permette all’utente di:
     - Caricare dati dal database
     - Eseguire clustering con raggio variabile
-    - Salvare cluster
+    - Salvare cluster su file
     - Ricaricare cluster da file
 
 ------------------------------------------------------------------------
@@ -82,22 +82,22 @@ Il sistema è organizzato nei seguenti package:
     start-client.bat
 
 In alternativa da Prompt dei comandi:
-    start-server.bat
-    start-client.bat
+- per il server : `start-server.bat`
+- per i client : `start-client.bat`
 
 ------------------------------------------------------------------------
 
 ## 4.2 Avvio su macOS / Linux
 
 Aprire il terminale nella cartella `start` ed eseguire:
-    chmod +x start-server.sh
-    chmod +x start-client.sh
+    `chmod +x start-server.sh`
+    `chmod +x start-client.sh`
 
 Avvio server:
-    ./start-server.sh
+    `./start-server.sh`
 
 Avvio client:
-    ./start-client.sh
+    `./start-client.sh`
 
 ![Esecuzione Server](../img/server.png)
 
@@ -140,18 +140,7 @@ I cluster vengono calcolati e mostrati a video, ad esempio:
 
 ------------------------------------------------------------------------
 
-# 6. Arresto del Server
-
-Per chiudere correttamente il server:
-
--   Windows: premere `CTRL + C`
--   macOS/Linux: premere `CTRL + C`
-
-Si consiglia di evitare la chiusura forzata della finestra.
-
-------------------------------------------------------------------------
-
-# 7. Interpretazione dei Risultati
+# 6. Interpretazione dei Risultati
 
 Al termine dell’esecuzione del clustering, il sistema mostra le informazioni relative ai cluster generati.  
 Ogni cluster è descritto attraverso i seguenti elementi:
@@ -175,6 +164,16 @@ Ogni cluster è descritto attraverso i seguenti elementi:
   - valori più alti → cluster più disperso
 
 ------------------------------------------------------------------------
+# 7. Arresto del Server
+
+Per chiudere correttamente il server:
+
+-   Windows: premere `CTRL + C`
+-   macOS/Linux: premere `CTRL + C`
+
+Si consiglia di evitare la chiusura forzata della finestra.
+
+------------------------------------------------------------------------
 
 # 8. Risoluzione dei Problemi
 
@@ -182,7 +181,6 @@ Ogni cluster è descritto attraverso i seguenti elementi:
 
 Verificare: 
 - Che MySQL sia attivo
-- Che le credenziali siano corrette
 - Che il driver MySQL sia presente in `Server / libs/`
 
 ## Errore: ClusteringRadiusException
