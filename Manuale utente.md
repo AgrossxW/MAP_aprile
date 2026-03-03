@@ -5,18 +5,19 @@
 # Indice
 
 1. [Introduzione](#1-introduzione)  
-2. [Requisiti di Sistema](#2-requisiti-di-sistema)  
-3. [Struttura del Sistema](#3-struttura-del-sistema)  
-4. [Modalità di Avvio](#4-modalità-di-avvio)  
+2. [Requisiti di Sistema](#2-requisiti-di-sistema)
+   - [2.1 Configurazione del Database](#21-Configurazione-del-Database)
+4. [Struttura del Sistema](#3-struttura-del-sistema)  
+5. [Modalità di Avvio](#4-modalità-di-avvio)  
    - [4.1 Avvio su Windows](#41-avvio-su-windows)  
    - [4.2 Avvio su macOS / Linux](#42-avvio-su-macos--linux)  
-5. [Utilizzo del Client](#5-utilizzo-del-client)  
+6. [Utilizzo del Client](#5-utilizzo-del-client)  
    - [5.1 Caricamento da File](#51-Caricamento-da-File-load-to-file)  
    - [5.2 Caricamento da Database](#52-Caricamento-da-Database-Load-to-DB) 
-6. [Arresto del Server](#6-arresto-del-server)
-7. [Interpretazione dei Risultati](#7-interpretazione-dei-risultati) 
-8. [Risoluzione dei Problemi](#9-risoluzione-dei-problemi)  
-9. [Architettura del Sistema](#10-architettura-del-sistema)
+7. [Interpretazione dei Risultati](#6-interpretazione-dei-risultati) 
+8. [Arresto del Server](#7-arresto-del-server)
+9. [Risoluzione dei Problemi](#8-risoluzione-dei-problemi)  
+10. [Architettura del Sistema](#9-architettura-del-sistema)
 
 ------------------------------------------------------------------------
 
@@ -45,13 +46,40 @@ Per eseguire il sistema è necessario:
 
 -   Java JDK 17 o superiore
 -   MySQL Server installato e attivo (per modalità database)
--   Driver MySQL Connector presente nella cartella `Server / libs /`
+-   Driver MySQL Connector presente nella cartella `Server/libs/`
+
+Requisiti di Rete
+
+- Il **Client** e il **Server** devono poter comunicare sulla rete.
+- Se eseguiti sulla stessa macchina, è sufficiente utilizzare `localhost` (IP 127.0.0.1).
+- La porta **8080** deve essere libera sul computer in cui viene avviato il Server, affinché possa mettersi in ascolto delle connessioni in ingresso.
+     - ⚠ Se la porta 8080 è già occupata, il Server non potrà avviarsi correttamente.
 
 Sistemi operativi supportati:
 
 -   Windows
 -   macOS
 -   Linux
+
+
+
+## 2.1 Configurazione del Database
+
+Prima di utilizzare la modalità di apprendimento da database, è necessario configurare il database MySQL.
+
+1. Avviare MySQL Server.
+2. Aprire un client MySQL (MySQL Workbench o terminale).
+3. Eseguire lo script `mapDB.sql` presente nel progetto.
+
+Esempio da terminale:
+`mysql -u root -p < mapDB.sql`
+
+Lo script crea:
+- Il database necessario
+- Le tabelle richieste
+- I dati di esempio utilizzati dal sistema
+
+⚠ Senza l’esecuzione di `mapDB.sql`, la modalità database non funzionerà correttamente.
 
 ------------------------------------------------------------------------
 
