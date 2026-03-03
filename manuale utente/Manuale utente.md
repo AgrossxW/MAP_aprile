@@ -319,16 +319,6 @@ Questa sezione descrive i problemi più comuni che l’utente può incontrare du
 - Eseguire prima il clustering in modalità **Load data from db** (opzione 2), così da generare e salvare il file `.dat`.
 - Riprovare poi con **Load clusters from file** (opzione 1) usando gli stessi tabella e raggio.
 
----
-
-## 8.6 Comportamenti Noti del Programma
-
-- Alla fine di un’esecuzione in modalità Database, il sistema chiede:
-  - `Would you repeat? (y/n)` per ripetere la stessa operazione con un nuovo raggio.
-- Dopo ogni operazione, il sistema chiede:
-  - `would you choose a new operation from menu?(y/n)`
-  - Se si inserisce `n`, il client termina l’esecuzione.
-
 ------------------------------------------------------------------------
 
 # 9. Architettura del Sistema
