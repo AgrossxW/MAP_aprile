@@ -161,7 +161,7 @@ Procedura:
    - Nome della tabella  
    - Raggio da utilizzare
   
-![Load to DB](img/db1.png)
+![Load to DB](../img/db1.png)
 
 I cluster vengono calcolati e mostrati a video, ad esempio:
 
