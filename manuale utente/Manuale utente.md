@@ -17,8 +17,12 @@
    - [5.3  Ritorno al menu o uscita dal programma](#53-Ritorno-al-menu-o-uscita-dal-programma)
 6. [Interpretazione dei Risultati](#6-interpretazione-dei-risultati) 
 7. [Arresto del Server](#7-arresto-del-server)
-8. [Risoluzione dei Problemi](#8-risoluzione-dei-problemi)  
-9. [Architettura del Sistema](#9-architettura-del-sistema)
+8. [Risoluzione dei Problemi](#8-risoluzione-dei-problemi)
+   - [8.1 Errori di connessione e avvio](#81-errori-di-connessione-e-avvio)
+   - [8.2 Errori database](#82-errori-database)
+   - [8.3 Errori di inserimento input utente](#83-errori-di-inserimento-input-utente)
+   - [8.4 Errori di clustering](#84-errori-di-clustering)
+   - [8.5 Errori di caricamento da file](#85-errori-di-caricamento-da-file)
 
 ------------------------------------------------------------------------
 
@@ -244,15 +248,86 @@ Si consiglia di evitare la chiusura forzata della finestra.
 
 # 8. Risoluzione dei Problemi
 
-## Errore: DatabaseConnectionException
+Questa sezione descrive i problemi più comuni che l’utente può incontrare durante l’esecuzione e come risolverli.
 
-Verificare: 
-- Che MySQL sia attivo
-- Che il driver MySQL sia presente in `Server / libs/`
+---
 
-## Errore: ClusteringRadiusException
+## 8.1 Errori di Connessione e Avvio
 
-Segnala la generazione di un solo cluster da parte dell’algoritmo QT-Clustering !
+### Errore: `java.net.ConnectException: Connection refused`
+**Causa:** il Client non riesce a connettersi al Server (server non avviato, porta errata o bloccata).  
+**Soluzione:**
+- Avviare prima il Server e solo dopo il Client.
+- Verificare che la porta **8080** sia libera sul computer dove gira il Server.
+- Se Client e Server sono su macchine diverse, verificare IP/host e connettività di rete.
+
+---
+
+## 8.2 Errori Database
+
+### Errore: `DatabaseConnectionException`
+**Causa:** il Server non riesce a stabilire una connessione a MySQL.  
+**Soluzione:**
+- Verificare che **MySQL Server sia in esecuzione**.
+- Verificare le credenziali e i parametri di connessione (host, porta, user, password).
+- Verificare che il driver MySQL Connector/J sia presente in `Server/libs/`.
+
+### Errore: `SQLException` (tabella non trovata / query non valida)
+**Causa:** la tabella indicata non esiste oppure lo schema non è stato inizializzato.  
+**Soluzione:**
+- Verificare di aver eseguito lo script `mapDB.sql`.
+- Controllare che il nome della tabella inserito sia corretto (rispetta maiuscole/minuscole se necessario).
+
+### Errore: `EmptySetException` / `NoValueException`
+**Causa:** la tabella esiste ma non contiene dati compatibili con l’elaborazione (tabella vuota o valori mancanti).  
+**Soluzione:**
+- Popolare la tabella con dati validi.
+- Verificare che la tabella contenga righe e valori nelle colonne utilizzate.
+
+---
+
+## 8.3 Errori di Inserimento (Input Utente)
+
+### Comportamento: il menu viene riproposto (scelta non valida)
+**Causa:** è stato inserito un valore non valido nel menu (es. diverso da `1` o `2`).  
+**Soluzione:** inserire `1` o `2` per selezionare l’operazione desiderata.
+
+### Comportamento: il sistema continua a chiedere il raggio (radius)
+**Causa:** è stato inserito un valore non valido (non numerico o `<= 0`).  
+**Soluzione:** inserire un valore numerico **maggiore di 0**.
+
+---
+
+## 8.4 Errori di Clustering
+
+### Errore: `ClusteringRadiusException`
+**Significato:** il raggio scelto produce un risultato non utile (tipicamente **un solo cluster** oppure clustering poco significativo).  
+**Soluzione:**
+- Ripetere l’esecuzione inserendo un raggio più adatto:
+  - se ottieni **un unico cluster**, prova un raggio **più piccolo**
+  - se ottieni **troppi cluster piccoli**, prova un raggio **più grande**
+
+*(Suggerimento pratico: usare la domanda finale `Would you repeat? (y/n)` per riprovare rapidamente con un nuovo raggio.)*
+
+---
+
+## 8.5 Errori di Caricamento da File
+
+### Errore: file `.dat` non trovato / clustering non disponibile
+**Causa:** non esiste un clustering salvato per la coppia **(tabella, raggio)** inserita.  
+**Soluzione:**
+- Eseguire prima il clustering in modalità **Load data from db** (opzione 2), così da generare e salvare il file `.dat`.
+- Riprovare poi con **Load clusters from file** (opzione 1) usando gli stessi tabella e raggio.
+
+---
+
+## 8.6 Comportamenti Noti del Programma
+
+- Alla fine di un’esecuzione in modalità Database, il sistema chiede:
+  - `Would you repeat? (y/n)` per ripetere la stessa operazione con un nuovo raggio.
+- Dopo ogni operazione, il sistema chiede:
+  - `would you choose a new operation from menu?(y/n)`
+  - Se si inserisce `n`, il client termina l’esecuzione.
 
 ------------------------------------------------------------------------
 
