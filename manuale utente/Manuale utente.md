@@ -127,6 +127,7 @@ Avvio server:
 Avvio client:
     `./start-client.sh`
 
+Esempio avvio server :
 ![Esecuzione Server](../img/server1.png)
 
 ------------------------------------------------------------------------
