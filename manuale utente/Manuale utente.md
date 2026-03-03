@@ -319,12 +319,3 @@ Questa sezione descrive i problemi più comuni che l’utente può incontrare du
 - Eseguire prima il clustering in modalità **Load data from db** (opzione 2), così da generare e salvare il file `.dat`.
 - Riprovare poi con **Load clusters from file** (opzione 1) usando gli stessi tabella e raggio.
 
-------------------------------------------------------------------------
-
-# 9. Architettura del Sistema
-
-Il sistema segue un'architettura a livelli:
-
-Server → Mining → Data → Database
-
-Le dipendenze sono unidirezionali per garantire separazione delle responsabilità.
