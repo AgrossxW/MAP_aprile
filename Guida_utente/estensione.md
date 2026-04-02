@@ -1,5 +1,4 @@
-
-## Guida Utente – Estensione progetto ClientTelegram
+# Guida Utente – Estensione progetto ClientTelegram
 
 # Indice
 
