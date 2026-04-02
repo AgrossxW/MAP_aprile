@@ -93,12 +93,11 @@ Seguire i seguenti passi:
 ---
 
 # 6. Comandi disponibili
+- `/start` → avvia il bot
 
 ## 6.1 Menu principale
-- `/start` → avvia il bot
 - `/loadfromdb` → modalità database
 - `/loadfromfile` → modalità file
-- `/back` → ritorna al menu principale
 
 ## 6.2 Modalità database
 - `/table` → inserimento nome tabella
@@ -106,6 +105,7 @@ Seguire i seguenti passi:
 - `/compute` → esegue clustering
 - `/status` → mostra parametri correnti
 - `/saveonfile` → salva clustering su file
+- `/back` → ritorna al menu principale
 
 ## 6.3 Modalità file
 - selezione numerica del file mostrato dal bot
