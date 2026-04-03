@@ -4,7 +4,12 @@
 
 1. [Introduzione](#1-introduzione)  
 2. [Accesso al bot Telegram](#2-accesso-al-bot-telegram)  
-3. [Nota progettuale](#3-nota-progettuale)  
+3. [Scelte progettuali](#3-scelte-progettuali)  
+   - [3.1 Bot Telegram come client separato](#31-bot-telegram-come-client-separato)  
+   - [3.2 Riuso del server e del protocollo](#32-riuso-del-server-e-del-protocollo)  
+   - [3.3 Gestione di più utenti con un solo processo](#33-gestione-di-più-utenti-con-un-solo-processo)  
+   - [3.4 Connessione client-server on-demand](#34-connessione-client-server-on-demand)  
+   - [3.5 Uso di `static` e `final`](#35-uso-di-static-e-final)
 4. [Requisiti di sistema](#4-requisiti-di-sistema)  
 5. [Avvio del sistema](#5-avvio-del-sistema)  
    - [5.1 Avvio del database MySQL](#51-avvio-del-database-mysql)  
@@ -56,21 +61,39 @@ Il bot può essere raggiunto in due modi:
 
 ---
 
-# 3. Nota progettuale
-Il ClientTelegram è stato progettato come **client separato**, mantenendo invariato il server QT.
+# 3. Scelte progettuali
 
-Caratteristiche principali:
-- Il bot è eseguito come **un unico processo client**
-- Può gestire **più chat contemporaneamente**
-- Ogni chat ha una propria **UserSession indipendente**
-- La connessione al server viene aperta **solo quando necessario (on-demand)**
+L’estensione è stata realizzata **solo lato client**, lasciando invariato il server QT del progetto base. Il bot Telegram è stato quindi progettato come **nuovo client** del sistema, capace di comunicare con il server tramite socket TCP e usando lo stesso protocollo del client testuale. Questa scelta permette di mantenere l’architettura client-server originale senza modificare la logica del server. 
 
-Questo approccio garantisce:
-- separazione degli stati tra utenti
-- efficienza nell’uso delle risorse
-- riutilizzo completo del server esistente
+## 3.1 Bot Telegram come client separato
+Il bot non è stato integrato nel server, ma sviluppato come componente autonomo. In questo modo:
+- il server continua a occuparsi solo del clustering e della gestione dei dati
+- il client Telegram gestisce solo l’interazione con l’utente
+- il sistema resta più coerente con il progetto base
 
-Il bot rappresenta quindi un **nuovo client** del sistema, mentre il server continua a svolgere la logica di clustering senza dipendere dall’interfaccia utente.
+Questa soluzione è architetturalmente preferibile rispetto a inserire il bot direttamente nel server, perché mantiene separati i ruoli dei componenti e rende il server riutilizzabile anche da altri client. :contentReference[oaicite:1]{index=1}
+
+## 3.2 Riuso del server e del protocollo
+Il server del progetto base era già completo e testato. Per questo motivo si è scelto di **riutilizzarlo senza modifiche**, sfruttando lo stesso protocollo di comunicazione già esistente. Il client Telegram si limita quindi a tradurre i comandi dell’utente nelle richieste previste dal server. Questo evita duplicazioni di logica e rende il sistema più stabile e manutenibile.
+
+## 3.3 Gestione di più utenti con un solo processo
+Un vantaggio importante del bot Telegram è la possibilità di gestire **più chat contemporaneamente** pur avendo un solo processo client attivo. Questo è possibile perché ogni conversazione viene identificata tramite `chatId` e associata a una propria `UserSession`, che conserva lo stato dell’interazione. In questo modo i dati e i comandi di utenti diversi restano separati e non interferiscono tra loro.
+
+## 3.4 Connessione client-server on-demand
+La connessione verso il server non viene aperta all’avvio del bot, ma **solo quando serve davvero**, ad esempio durante `/compute` o nel caricamento effettivo di un file. I comandi preliminari, come `/table` e `/radius`, servono solo a raccogliere dati lato client. Questa scelta riduce connessioni inutili, evita spreco di risorse e rende l’interazione più efficiente. Nel flusso `/loadfromdb` la connessione può restare attiva per consentire anche `/saveonfile`, mentre in `/loadfromfile` viene usata in modo temporaneo.
+
+## 3.5 Uso di `static` e `final`
+Nel progetto sono stati usati diversi `static` e `final` per rendere il codice più chiaro e coerente.
+
+I `static` sono stati utilizzati soprattutto nelle classi di utilità, come `TelegramMenu`, `TelegramSender` e `FileManager`, perché queste classi non mantengono stato interno ma forniscono solo metodi di supporto. Sono inoltre `static` anche alcune costanti condivise, come gli stati della sessione in `UserSession` e i parametri di configurazione in `BotMain`.
+
+I `final`, pur non essendo sempre la scelta più flessibile in Java, sono stati usati nei punti in cui era importante esprimere chiaramente che un valore non deve cambiare:
+- nei parametri di configurazione del bot (`BOT_TOKEN`, `SERVER_HOST`, `SERVER_PORT`, ecc.)
+- nel riferimento alla mappa delle sessioni in `BotMain`
+- nei campi della classe `ClusterFileInfo`, che rappresenta un piccolo oggetto dati immutabile
+- nelle costanti che definiscono gli stati ammessi della sessione
+
+In questo progetto, quindi, `final` è stato usato non per rigidità, ma per migliorare la leggibilità del codice, evitare modifiche accidentali e rendere più esplicite le scelte progettuali.
 
 ---
 
