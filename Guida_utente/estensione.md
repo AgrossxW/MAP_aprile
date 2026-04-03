@@ -349,7 +349,7 @@ Di seguito sono riportati i principali errori che possono verificarsi durante lâ
 **Soluzione:**
 - verificare che il server sia in esecuzione
 - controllare che la porta **8080** sia libera
-- riavviare il server tramite `start-server.sh` o `.bat`
+- riavviare il server tramite `start-server.sh` o `start-server.bat`
 
 ---
 
@@ -372,7 +372,7 @@ Di seguito sono riportati i principali errori che possono verificarsi durante lâ
 **Soluzione:**
 - verificare il nome inserito con `/table`
 - controllare le tabelle disponibili con:
-- SHOW TABLES;
+- `SHOW TABLES;`
 - assicurarsi di aver eseguito lo script `setup_mapdb_estensione.sql`
 
 ---
@@ -424,9 +424,9 @@ Di seguito sono riportati i principali errori che possono verificarsi durante lâ
 ### Warning SLF4J allâ€™avvio
 **Messaggio:**
 
-SLF4J: No SLF4J providers were found
+`SLF4J: No SLF4J providers were found`
 
-SLF4J: Defaulting to no-operation (NOP) logger implementation
+`SLF4J: Defaulting to no-operation (NOP) logger implementation`
 
 **Causa:** mancanza di una configurazione del sistema di logging.
 
