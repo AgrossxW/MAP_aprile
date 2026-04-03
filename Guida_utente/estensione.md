@@ -28,9 +28,7 @@
 8. [Gestione della sessione](#8-gestione-della-sessione)  
 9. [Interpretazione dei risultati](#9-interpretazione-dei-risultati)  
 10. [Errori comuni e soluzioni](#10-errori-comuni-e-soluzioni)  
-   - [10.1 Checklist rapida di verifica](#101-checklist-rapida-di-verifica)  
-11. [Note finali](#11-note-finali)  
-12. [Conclusione](#12-conclusione)  
+   - [10.1 Checklist rapida di verifica](#101-checklist-rapida-di-verifica)
 
 ---
 
@@ -472,21 +470,3 @@ Prima di utilizzare il bot, verificare rapidamente i seguenti punti:
 - ✔ È stata seguita la sequenza corretta dei comandi (`/table`, `/radius`, `/compute`)
 
 Se uno di questi punti non è soddisfatto, il sistema potrebbe non funzionare correttamente.
-
----
-
-# 11. Note finali
-- Il salvataggio su file avviene sul server, nella directory prevista dal progetto base
-- I file caricabili devono rispettare il formato previsto dal sistema
-- La connessione al server è gestita automaticamente dal bot
-- Il bot è progettato per un utilizzo semplice e guidato tramite menu
-- La modalità database e la modalità file hanno comportamenti diversi nella gestione della connessione:
-  - in `/loadfromdb` la connessione viene aperta a `/compute` e può restare attiva per permettere `/saveonfile`
-  - in `/loadfromfile` ogni richiesta è autonoma e usa una connessione temporanea
-
----
-
-# 12. Conclusione
-Il ClientTelegram rappresenta un’interfaccia moderna e intuitiva per il sistema QT, permettendo di utilizzare le funzionalità principali del progetto tramite un semplice bot Telegram, senza necessità di usare il client testuale.
-
-L’estensione mantiene l’architettura client-server del progetto base e rende il sistema più accessibile, pur lasciando invariata la logica del server.
