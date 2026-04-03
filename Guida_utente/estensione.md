@@ -22,7 +22,8 @@
    - [7.3 Caricamento da file](#73-caricamento-da-file)  
 8. [Gestione della sessione](#8-gestione-della-sessione)  
 9. [Interpretazione dei risultati](#9-interpretazione-dei-risultati)  
-10. [Errori comuni](#10-errori-comuni)  
+10. [Errori comuni e soluzioni](#10-errori-comuni-e-soluzioni)  
+   - [10.1 Checklist rapida di verifica](#10.1-Checklist-rapida-di-verifica)
 11. [Note finali](#11-note-finali)  
 12. [Conclusione](#12-conclusione)  
 
@@ -267,7 +268,7 @@ Per eseguire il clustering a partire da una tabella del database, seguire questa
 
 Comandi opzionali:
 - `/status` → visualizza lo stato corrente della sessione
-- `/saveonfile` → salva il clustering su file nella cartella `QT_base/start`
+- `/saveonfile` → salva il clustering su file nella cartella `QT_base/start` (lato server)
 - `/back` → torna al menu principale
 
 📌 La connessione al server viene aperta al momento di `/compute`.
@@ -298,14 +299,20 @@ Esempio di schermata del menu file:
 ---
 
 # 8. Gestione della sessione
-Ogni chat Telegram ha una propria **sessione indipendente**.
 
-La sessione contiene:
-- nome tabella
-- valore del raggio
-- stato dell’input
-- eventuale connessione al server
-- lista dei file disponibili nel flusso di caricamento da file
+Ogni chat Telegram è associata a una **sessione indipendente**, che permette al bot di gestire più utenti contemporaneamente senza mescolare dati e comandi tra conversazioni diverse.
+
+Per ogni utente, il sistema mantiene una sessione che contiene:
+- il nome della tabella selezionata
+- il valore del raggio (`radius`)
+- lo stato dell’interazione, cioè l’informazione che il bot sta aspettando in quel momento
+- un’eventuale connessione attiva al server QT
+- la lista dei file disponibili nel flusso di caricamento da file
+
+Lo **stato dell’interazione** serve a guidare correttamente l’utente durante l’uso del bot. Ad esempio:
+- dopo il comando `/table`, il bot attende il nome della tabella
+- dopo il comando `/radius`, il bot attende un valore numerico
+- durante `/loadfromfile`, il bot attende il numero corrispondente al file da caricare
 
 Comportamenti importanti:
 - `/back` resetta la sessione corrente e riporta al menu principale
@@ -313,7 +320,6 @@ Comportamenti importanti:
 - le sessioni di utenti diversi non interferiscono tra loro
 
 Questo rende possibile gestire **più utenti contemporaneamente** pur avendo un solo processo del bot attivo.
-
 ---
 
 # 9. Interpretazione dei risultati
@@ -329,16 +335,120 @@ Queste informazioni permettono di valutare la struttura dei cluster generati e l
 
 ---
 
-# 10. Errori comuni
-Possibili errori e cause:
+# 10. Errori comuni e soluzioni
 
-- **Server non attivo** → errore di connessione
-- **MySQL non attivo** → errore database durante `/compute`
-- **Tabella inesistente o non valida** → errore SQL o rifiuto dell’input
-- **Radius non valido** → il bot richiede un numero maggiore di 0
-- **Selezione file non valida** → numero fuori intervallo o input non numerico
-- **Comando non valido nel menu corrente** → il bot segnala che il comando non è ammesso in quel contesto
-- **Nessuna connessione attiva** → uso scorretto di `/saveonfile` prima di `/compute`
+Di seguito sono riportati i principali errori che possono verificarsi durante l’utilizzo del sistema, insieme alle possibili soluzioni.
+
+---
+
+### Server non attivo
+**Errore:** il bot segnala un errore di connessione durante l’esecuzione di `/compute` o altre operazioni.
+
+**Causa:** il server QT non è avviato.
+
+**Soluzione:**
+- verificare che il server sia in esecuzione
+- controllare che la porta **8080** sia libera
+- riavviare il server tramite `start-server.sh` o `.bat`
+
+---
+
+### MySQL non attivo
+**Errore:** errore durante il caricamento da database (SQL error o connection failure).
+
+**Causa:** il server MySQL non è avviato.
+
+**Soluzione:**
+- avviare MySQL (es. `brew services start mysql` su macOS oppure servizio MySQL su Windows)
+- verificare che le credenziali siano corrette
+
+---
+
+### Tabella inesistente o non valida
+**Errore:** il bot non riesce a caricare i dati o segnala errore SQL.
+
+**Causa:** nome tabella errato o non presente nel database.
+
+**Soluzione:**
+- verificare il nome inserito con `/table`
+- controllare le tabelle disponibili con:
+- SHOW TABLES;
+- assicurarsi di aver eseguito lo script `setup_mapdb_estensione.sql`
+
+---
+
+### Radius non valido
+**Errore:** il bot rifiuta il valore inserito.
+
+**Causa:** il valore del raggio non è numerico o è minore/uguale a 0.
+
+**Soluzione:**
+- inserire un numero valido maggiore di 0
+- evitare caratteri non numerici
+
+---
+
+### Selezione file non valida
+**Errore:** il bot segnala input non valido nella modalità `/loadfromfile`.
+
+**Causa:** numero fuori intervallo o input non numerico.
+
+**Soluzione:**
+- inserire un numero presente nella lista mostrata
+- evitare lettere o simboli
+
+---
+
+### Comando non valido nel contesto corrente
+**Errore:** il bot segnala che il comando non è ammesso.
+
+**Causa:** il comando è stato utilizzato nel menu sbagliato.
+
+**Soluzione:**
+- seguire la sequenza corretta dei comandi
+- usare `/back` per tornare al menu principale
+
+---
+
+### Nessuna connessione attiva
+**Errore:** uso di `/saveonfile` senza aver eseguito `/compute`.
+
+**Causa:** non è stata ancora creata una connessione al server.
+
+**Soluzione:**
+- eseguire prima `/compute`
+- poi utilizzare `/saveonfile`
+
+---
+
+### Warning SLF4J all’avvio
+**Messaggio:**
+
+SLF4J: No SLF4J providers were found
+
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+
+**Causa:** mancanza di una configurazione del sistema di logging.
+
+**Soluzione:**
+- nessuna azione necessaria
+- il sistema funziona correttamente anche in presenza del warning
+
+---
+
+## 10.1 Checklist rapida di verifica
+
+Prima di utilizzare il bot, verificare rapidamente i seguenti punti:
+
+- ✔ Il server QT è attivo (porta 8080 in ascolto)
+- ✔ MySQL è attivo (solo per modalità `/loadfromdb`)
+- ✔ Lo script `setup_mapdb_estensione.sql` è stato eseguito correttamente
+- ✔ Le tabelle (`playtennis`, `cars`, `weather`, `students`) sono presenti nel database
+- ✔ Il ClientTelegram è avviato
+- ✔ Il bot Telegram è raggiungibile e risponde al comando `/start`
+- ✔ È stata seguita la sequenza corretta dei comandi (`/table`, `/radius`, `/compute`)
+
+Se uno di questi punti non è soddisfatto, il sistema potrebbe non funzionare correttamente.
 
 ---
 
