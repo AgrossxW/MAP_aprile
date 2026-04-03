@@ -23,7 +23,7 @@
 8. [Gestione della sessione](#8-gestione-della-sessione)  
 9. [Interpretazione dei risultati](#9-interpretazione-dei-risultati)  
 10. [Errori comuni e soluzioni](#10-errori-comuni-e-soluzioni)  
-   - [10.1 Checklist rapida di verifica](#10.1-Checklist-rapida-di-verifica)
+   - [10.1 Checklist rapida di verifica](#101-checklist-rapida-di-verifica)  
 11. [Note finali](#11-note-finali)  
 12. [Conclusione](#12-conclusione)  
 
