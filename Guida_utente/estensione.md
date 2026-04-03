@@ -7,6 +7,11 @@
 3. [Nota progettuale](#3-nota-progettuale)  
 4. [Requisiti di sistema](#4-requisiti-di-sistema)  
 5. [Avvio del sistema](#5-avvio-del-sistema)  
+   - [5.1 Avvio del database MySQL](#51-avvio-del-database-mysql)  
+   - [5.2 Avvio del server QT](#52-avvio-del-server-qt)  
+   - [5.3 Avvio del Client Telegram](#53-avvio-del-client-telegram)  
+   - [5.4 Avvio del bot Telegram](#54-avvio-del-bot-telegram)  
+   - [5.5 Terminazione dei processi](#55-terminazione-dei-processi) 
 6. [Comandi disponibili](#6-comandi-disponibili)  
    - [6.1 Menu principale](#61-menu-principale)  
    - [6.2 Modalità database](#62-modalità-database)  
@@ -80,17 +85,145 @@ Per utilizzare il ClientTelegram sono necessari:
 ---
 
 # 5. Avvio del sistema
-Seguire i seguenti passi:
+Per utilizzare il bot è necessario avviare correttamente tutti i componenti del sistema.
 
-1. Avviare MySQL, se si desidera usare il caricamento da database
-2. Avviare il server QT
-3. Avviare il ClientTelegram
-4. Aprire Telegram e cercare il bot
-5. Premere `Avvia` oppure inviare il comando `/start`
+## 5.1 Avvio del database MySQL
 
-⚠️ Il bot può essere avviato anche senza server attivo: la connessione verrà stabilita solo quando necessario.
+Per utilizzare il sistema è necessario avviare il server MySQL ed eseguire lo script di inizializzazione del database.
+
+#### Avvio del server MySQL
+
+A seconda del sistema operativo:
+
+**macOS (Homebrew):** `brew services start mysql`
+oppure: `mysql.server start`
+
+**Windows:**
+- Aprire *Servizi* (services.msc)
+- Avviare il servizio **MySQL** oppure **MySQL80**
+
+In alternativa da terminale: `net start MySQL80`
+
+#### Accesso a MySQL
+
+Aprire il terminale ed eseguire:
+`mysql -u root -p`
+
+Inserire la password quando richiesta.
 
 ---
+
+#### Esecuzione dello script SQL
+
+Una volta entrati nella console MySQL, eseguire:
+`source QT_estensione/start/setup_mapdb_estensione.sql;`
+
+---
+
+#### Cosa fa lo script
+
+Lo script:
+
+- crea il database **MapDB**
+- crea le tabelle:
+  - `playtennis`
+  - `cars`
+  - `weather`
+  - `students`
+- inserisce i dati necessari per il clustering
+
+---
+
+#### Verifica
+
+`SHOW DATABASES;`
+
+`USE MapDB;`
+
+`SHOW TABLES;`
+
+Se compaiono le tabelle sopra indicate, il database è stato configurato correttamente.
+
+---
+
+### 5.2 Avvio del server QT
+
+Avviare il server del progetto base tramite:
+
+**Linux / macOS:**
+
+`QT_base/start/start-server.sh`
+
+
+**Windows:**
+
+`QT_base/start/start-server.bat`
+
+
+Esempio di output atteso:
+
+![Avvio Server](../img/Server.png)
+
+Il server rimane in ascolto sulla porta **8080**.
+
+---
+
+### 5.3 Avvio del Client Telegram
+
+Aprire un nuovo terminale e avviare il client Telegram:
+
+**Linux / macOS:**
+
+`QT_estensione/start/start-client-telegram.sh`
+
+
+**Windows:**
+
+`QT_estensione/start/start-client-telegram.bat`
+
+
+Esempio di output:
+
+![Avvio Client Telegram](../img/ClientTelegram.png)
+
+#### ⚠️ Nota sui warning
+
+Durante l’avvio possono comparire i seguenti warning:
+
+
+`SLF4J: No SLF4J providers were found`
+
+`SLF4J: Defaulting to no-operation (NOP) logger implementation`
+
+
+Questi messaggi **non compromettono il funzionamento del sistema** e sono dovuti alla mancanza di una configurazione esplicita del logger.
+
+Il client continuerà a funzionare correttamente.
+
+---
+
+### 5.4 Avvio del bot Telegram
+
+Una volta avviati server e client, accedere al bot Telegram come descritto nella sezione:
+
+👉 [Accesso al bot Telegram](#2-accesso-al-bot-telegram)
+
+Premere `/start` per iniziare l'interazione.
+
+---
+
+### 5.5 Terminazione dei processi
+
+Per terminare l’esecuzione sia del server QT che del Client Telegram è sufficiente utilizzare la combinazione di tasti:
+`CTRL + C`
+
+Questa operazione interrompe il processo attivo nel terminale.
+
+> ⚠️ Nota:  
+> È necessario eseguire questa operazione separatamente per ogni terminale in cui sono stati avviati il server e il client.
+
+---
+
 
 # 6. Comandi disponibili
 - `/start` → avvia il bot
@@ -134,10 +267,12 @@ Per eseguire il clustering a partire da una tabella del database, seguire questa
 
 Comandi opzionali:
 - `/status` → visualizza lo stato corrente della sessione
-- `/saveonfile` → salva il clustering su file
+- `/saveonfile` → salva il clustering su file nella cartella `QT_base/start`
 - `/back` → torna al menu principale
 
 📌 La connessione al server viene aperta al momento di `/compute`.
+
+📌 Il file generato viene salvato lato server e sarà successivamente disponibile nella modalità `/loadfromfile`.
 
 Esempio di schermata del menu database:
 
